@@ -1,0 +1,8 @@
+package org.kshrd.gamifiedhabittracker.exception;
+
+public class EmailAlreadyExistsException extends RuntimeException {
+
+    public EmailAlreadyExistsException(String message) {
+        super(message);
+    }
+}
