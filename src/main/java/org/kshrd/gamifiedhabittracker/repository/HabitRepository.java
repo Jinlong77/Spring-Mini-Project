@@ -25,4 +25,10 @@ public interface HabitRepository {
     @Select("SELECT * FROM habits WHERE habit_id = #{habitId}")
     HabitEntity findHabitById(@Param("habitId") UUID habitId);
 
+    //--
+    @ResultMap("habitMapper")
+    @Select("SELECT * FROM habits WHERE habit_id = #{habitId}")
+    HabitEntity getHabitById(UUID habitId);
+
+
 }

@@ -23,4 +23,9 @@ public class HabitServiceImp implements HabitService {
     public List<HabitEntity> getHabitsByUserId(UUID userId) {
         return habitRepository.getHabitsByUserIdRepo(userId);
     }
+
+    @Override
+    public HabitEntity getHabitsByHabitId(UUID habitId) {
+        return habitRepository.getHabitById(habitId);
+    }
 }

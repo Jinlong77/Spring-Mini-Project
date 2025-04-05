@@ -8,4 +8,6 @@ import java.util.UUID;
 public interface HabitService {
 
     List<HabitEntity> getHabitsByUserId(UUID userId);
+
+     HabitEntity getHabitsByHabitId(UUID habitId) ;
 }

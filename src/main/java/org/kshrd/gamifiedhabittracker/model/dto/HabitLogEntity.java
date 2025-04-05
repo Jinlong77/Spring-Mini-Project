@@ -5,7 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -14,9 +16,19 @@ import java.util.UUID;
 @Builder
 public class HabitLogEntity {
 
-    private UUID habitLogId; // Use UUID instead of String
-    private LocalDateTime logDate;
+    private UUID habitLogId;
+    private LocalDate logDate;
     private String status;
     private Integer xpEarned;
-    private HabitEntity habits;
+    private List<HabitEntity> habits;
+
+//    // Getter for habitId, delegating to the HabitEntity object
+//    public UUID getHabitId() {
+//        return habits != null ? habits.getHabitId() : null;
+//    }
+//
+//    // Ensure there is a setter for `setHabits`
+//    public void setHabits(HabitEntity habit) {
+//        this.habits = habit;
+//    }
 }

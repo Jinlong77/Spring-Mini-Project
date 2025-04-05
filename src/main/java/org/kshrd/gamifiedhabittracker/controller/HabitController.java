@@ -7,6 +7,7 @@ import org.kshrd.gamifiedhabittracker.service.implementation.HabitServiceImp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,6 +33,20 @@ public class HabitController {
         List<HabitEntity> habitEntity = habitService.getHabitsByUserId( userUUID);
 
         Response<List<HabitEntity>> response = new Response<>(
+                "Habit log created successfully!",
+                "OK",
+                habitEntity,
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/{habit-id}")
+    public ResponseEntity<?> getAllHabitById(@PathVariable("habit-id") UUID habitId) {
+        UUID userUUID = UUID.fromString("f1a2b3c4-5d6e-7f89-a0b1-2345c678d901");
+        HabitEntity habitEntity = habitService.getHabitsByHabitId( habitId);
+
+        Response<HabitEntity> response = new Response<>(
                 "Habit log created successfully!",
                 "OK",
                 habitEntity,
