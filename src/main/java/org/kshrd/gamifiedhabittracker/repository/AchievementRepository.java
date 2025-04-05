@@ -9,27 +9,23 @@ import java.util.List;
 public interface AchievementRepository {
 
     @Select("""
-    SELECT * FROM achievements
-    offset  #{size} * (#{page}-1)
-    limit   #{size}
+        SELECT * FROM achievements
+        offset  #{size} * (#{page}-1)
+        limit   #{size};
     """)
-    @Results(id = "achievements",value = {
+    @Results(id = "achievementMapper",value = {
             @Result(property = "achievementId",column = "achievement_id"),
             @Result(property = "xpRequired",column = "xp_required")
     })
     List<AchievementEntity> getAllAchievements(Integer page, Integer size);
 
     @Select("""
-    SELECT * FROM achievements a
-    JOIN habit_logs hl ON a.xp_required = hl.xp_earned
-    WHERE hl.status = 'COMPLETED' AND hl.xp_earned >= 50  
-    offset  #{size} * (#{page}-1)
-    limit   #{size}
+        SELECT * FROM app_users a_user
+        INNER JOIN app_user_achievements a_user_achieve ON a_user.app_user_id = a_user_achieve.app_user_id
+        WHERE a_user_achieve.achievement_id = #{id} 
+        OFFSET  #{size} * (#{page}-1)
+        LIMIT   #{size};
     """)
-    @Results(id = "achievementWithLogs", value = {
-            @Result(property = "achievementId", column = "achievement_id"),
-            @Result(property = "xpRequired", column = "xp_required"),
-            @Result(property = "xpEarned", column = "xp_earned")
-    })
+    @ResultMap("achievementMapper")
     List<AchievementEntity> getAchievementByUser(Integer page, Integer size);
 }
