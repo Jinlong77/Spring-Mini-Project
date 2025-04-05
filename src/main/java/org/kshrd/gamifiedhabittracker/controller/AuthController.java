@@ -12,10 +12,10 @@ import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequestMapping(AUTH_API)
 public class AuthController {
-
-    @PostMapping("/verify")
-    public ResponseEntity<Response<?>> verifyEmail() {
-        return ResponseEntity.ok(getResponse("Email verified successfully", OK, null));
-    }
+//
+//    @PostMapping("/verify")
+//    public ResponseEntity<Response<?>> verifyEmail() {
+//        return ResponseEntity.ok(getResponse("Email verified successfully", OK, null));
+//    }
 
 }

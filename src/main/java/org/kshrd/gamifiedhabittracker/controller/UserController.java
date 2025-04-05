@@ -14,24 +14,24 @@ import static org.springframework.http.HttpStatus.OK;
 public class UserController {
 
 
-    @GetMapping
-    @Operation(summary = "Get User Profile")
-    public ResponseEntity<Response<?>> getUserProfile() {
-
-        return ResponseEntity.ok(getResponse("", OK, null));
-    }
-
-    @PutMapping
-    @Operation(summary = "Update User Profile")
-    public ResponseEntity<Response<?>> updateUserProfile() {
-
-        return ResponseEntity.ok(getResponse("", OK, null));
-    }
-
-    @DeleteMapping
-    @Operation(summary = "Delete User Profile")
-    public ResponseEntity<Response<?>> deleteUserProfile() {
-
-        return ResponseEntity.ok(getResponse("", OK, null));
-    }
+//    @GetMapping
+//    @Operation(summary = "Get User Profile")
+//    public ResponseEntity<Response<?>> getUserProfile() {
+//
+//        return ResponseEntity.ok(getResponse("", OK, null));
+//    }
+//
+//    @PutMapping
+//    @Operation(summary = "Update User Profile")
+//    public ResponseEntity<Response<?>> updateUserProfile() {
+//
+//        return ResponseEntity.ok(getResponse("", OK, null));
+//    }
+//
+//    @DeleteMapping
+//    @Operation(summary = "Delete User Profile")
+//    public ResponseEntity<Response<?>> deleteUserProfile() {
+//
+//        return ResponseEntity.ok(getResponse("", OK, null));
+//    }
 }
