@@ -5,7 +5,7 @@ import org.kshrd.gamifiedhabittracker.model.dto.AchievementEntity;
 import java.util.List;
 
 public interface AchievementService {
-    List<AchievementEntity> getAllAchievements();
+    List<AchievementEntity> getAllAchievements(Integer page, Integer size);
 
-    List<AchievementEntity> getAchievementByUserId(String userId);
+    List<AchievementEntity> getAchievementByAppUser(Integer page,Integer size);
 }
