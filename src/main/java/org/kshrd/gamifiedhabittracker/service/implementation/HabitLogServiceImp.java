@@ -21,14 +21,26 @@ public class HabitLogServiceImp implements HabitLogService {
     private final HabitRepository habitRepository;
     @Override
     public HabitLogEntity createNewHabitLogService(HabitLogRequest habitLogRequest) {
+        // Get how many times this habit has already been logged
+        int count = habitLogRepository.countLogsByHabitId(habitLogRequest.getHabitId());
+
+        // XP logic: (current count + 1) * 10
+        int xpEarned = 10;
+
+        // Create the entity
         HabitLogEntity log = HabitLogEntity.builder()
                 .logDate(LocalDate.now())
                 .status(habitLogRequest.getStatus())
-                .xpEarned(10)
-                .habits(null) // assuming this is set already
+                .xpEarned(xpEarned)
                 .build();
-       return habitLogRepository.createNewHabitLogRepo(habitLogRequest);
+
+        // Call the repo to insert
+        habitLogRepository.createNewHabitLogRepo(habitLogRequest, LocalDate.now(), xpEarned);
+
+        return log;
     }
+
+
 
 
     @Override
