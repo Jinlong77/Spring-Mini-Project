@@ -8,11 +8,11 @@ import org.kshrd.gamifiedhabittracker.enumeration.FrequencyType;
 @AllArgsConstructor
 @Builder
 public class HabitEntity {
-
     private String habitId;
     private String title;
     private String description;
     private FrequencyType frequencyType;
     private boolean isActive;
-    private Integer userId;
+    // Add this to fix the error
+    private AppUserEntity appUser;
 }

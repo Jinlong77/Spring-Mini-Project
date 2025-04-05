@@ -4,10 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.kshrd.gamifiedhabittracker.enumeration.HabitStatus;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -16,10 +14,9 @@ import java.util.UUID;
 @Builder
 public class HabitLogEntity {
 
-    private UUID habitLogId;
+    private UUID habitLogId; // Use UUID instead of String
     private LocalDateTime logDate;
-    private HabitStatus status;
+    private String status;
     private Integer xpEarned;
-    private List<HabitEntity> habits;
-
+    private HabitEntity habits;
 }
