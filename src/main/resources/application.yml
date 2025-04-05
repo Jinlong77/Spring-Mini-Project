@@ -8,6 +8,20 @@ spring:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
 
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 20MB
+      max-request-size: 30MB
+
+minio:
+  url: http://localhost:9000
+  access:
+    key: 0RiNo3lhiXsdAmb80wYD
+    secret: 2KrS1OzBpF5TvoNtjknlVdgP6APGqsQJb5TJiucq
+  bucket:
+    name: btb-group1-mini-project-bucket
 
 jwt:
   secret: ${JWT_SECRET}

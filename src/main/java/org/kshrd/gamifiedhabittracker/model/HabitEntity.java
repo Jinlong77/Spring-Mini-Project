@@ -1,4 +1,4 @@
-package org.kshrd.gamifiedhabittracker.model.dto;
+package org.kshrd.gamifiedhabittracker.model;
 
 import lombok.*;
 import org.kshrd.gamifiedhabittracker.enumeration.FrequencyType;
