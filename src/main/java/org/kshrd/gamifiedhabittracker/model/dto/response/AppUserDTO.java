@@ -1,17 +1,19 @@
-package org.kshrd.gamifiedhabittracker.model.dto;
+package org.kshrd.gamifiedhabittracker.model.dto.response;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.time.OffsetDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class AppUserEntity {
+
+public class AppUserDTO {
     private String userId;
     private String username;
     private String email;
-    private String password;
     private Integer level;
     private Integer xp;
     private String profileImage;

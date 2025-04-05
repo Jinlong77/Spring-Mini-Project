@@ -32,13 +32,13 @@ public class GlobalExceptionHandler {
         return detail;
     }
 
-    @ExceptionHandler()
-    public ProblemDetail handleApiException(HttpServletRequest request, ApiException e){
-        var detail = ProblemDetail.forStatusAndDetail(NOT_FOUND, e.getMessage());
-        detail.setProperty("timestamp", LocalDateTime.now());
-        detail.setType(URI.create(API_URL + request.getRequestURI()));
-        return detail;
-    }
+//    @ExceptionHandler()
+//    public ProblemDetail handleApiException(HttpServletRequest request, ApiException e){
+//        var detail = ProblemDetail.forStatusAndDetail(NOT_FOUND, e.getMessage());
+//        detail.setProperty("timestamp", LocalDateTime.now());
+//        detail.setType(URI.create(API_URL + request.getRequestURI()));
+//        return detail;
+//    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handleValidationExceptions(HttpServletRequest request, MethodArgumentNotValidException ex) {
