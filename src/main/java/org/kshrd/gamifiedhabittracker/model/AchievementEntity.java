@@ -1,6 +1,8 @@
-package org.kshrd.gamifiedhabittracker.model.dto;
+package org.kshrd.gamifiedhabittracker.model;
 
 import lombok.*;
+
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -8,7 +10,7 @@ import lombok.*;
 @Builder
 public class AchievementEntity {
 
-    private String achievementId;
+    private UUID achievementId;
     private String title;
     private String description;
     private String badge;

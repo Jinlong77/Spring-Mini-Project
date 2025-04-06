@@ -1,7 +1,9 @@
-package org.kshrd.gamifiedhabittracker.model.dto;
+package org.kshrd.gamifiedhabittracker.model;
 
 import lombok.*;
 import org.kshrd.gamifiedhabittracker.enumeration.FrequencyType;
+
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -9,10 +11,10 @@ import org.kshrd.gamifiedhabittracker.enumeration.FrequencyType;
 @Builder
 public class HabitEntity {
 
-    private String habitId;
+    private UUID habitId;
     private String title;
     private String description;
     private FrequencyType frequencyType;
     private boolean isActive;
-    private Integer userId;
+    private AppUserEntity user;
 }

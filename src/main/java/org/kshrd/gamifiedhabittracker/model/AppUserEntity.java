@@ -1,16 +1,19 @@
-package org.kshrd.gamifiedhabittracker.model.dto;
+package org.kshrd.gamifiedhabittracker.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class AppUserEntity {
 
-    private String userId;
+    private UUID userId;
     private String username;
     private String email;
     private String password;
@@ -18,5 +21,5 @@ public class AppUserEntity {
     private Integer xp;
     private String profileImage;
     private boolean isVerified;
-    private LocalDateTime createAt;
+    private Instant createdAt;
 }
