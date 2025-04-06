@@ -21,7 +21,7 @@ public class AppUserUtils {
 
     public static AppUserEntity getAppUserEntityFromDto(RegisterRequest appUser) {
         modelMapper.addConverter(appContext -> AppUserEntity.builder()
-                .userId(UUID.randomUUID())
+//                .userId(UUID.randomUUID())
                 .username(appContext.getSource().getUsername())
                 .email(appContext.getSource().getEmail())
                 .level(0)

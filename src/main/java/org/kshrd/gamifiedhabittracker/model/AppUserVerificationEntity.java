@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 public class AppUserVerificationEntity {
 
-    private UUID verificationId;
+    private String verificationId;
     private UUID userId;
     private String otp;
     private LocalDateTime expirationTime;

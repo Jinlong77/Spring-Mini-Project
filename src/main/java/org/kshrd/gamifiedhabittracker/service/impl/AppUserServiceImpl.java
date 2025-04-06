@@ -31,7 +31,6 @@ import static org.kshrd.gamifiedhabittracker.utils.AppUserUtils.getAppUserFromAp
 @RequiredArgsConstructor
 public class AppUserServiceImpl implements AppUserService {
 
-    private final AppUserVerificationRepository appUserVerificationRepository;
     private final AppUserRepository appUserRepository;
     private final ApplicationEventPublisher publisher;
     private final BCryptPasswordEncoder encoder;

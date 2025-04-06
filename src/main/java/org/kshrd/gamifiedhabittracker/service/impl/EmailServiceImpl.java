@@ -11,13 +11,13 @@ import org.kshrd.gamifiedhabittracker.service.EmailService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static java.time.LocalDateTime.now;
 import static org.kshrd.gamifiedhabittracker.utils.OTPUtils.generateOTP;
@@ -27,9 +27,10 @@ import static org.kshrd.gamifiedhabittracker.utils.OTPUtils.generateOTP;
 public class EmailServiceImpl implements EmailService {
 
     private final AppUserVerificationRepository appUserVerificationRepository;
-    private final JavaMailSender sender;
-    private final TemplateEngine templateEngine;
+    private final PasswordEncoder passwordEncoder;
     private final AppUserRepository appUserRepository;
+    private final TemplateEngine templateEngine;
+    private final JavaMailSender sender;
 
     @Value("${spring.mail.verify.host}")
     private String host;
@@ -89,23 +90,26 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void verifyOTP(String email, String otp) {
+    public void verifyOTP(String email, String providedOtp) {
         Optional<AppUserEntity> userOptional = Optional.ofNullable(appUserRepository.findAppUserByEmail(email));
         if (userOptional.isEmpty()) throw new ApiException("User not found");
 
         AppUserEntity user = userOptional.get();
-        Optional<AppUserVerificationEntity> verificationOptional = Optional.ofNullable(appUserVerificationRepository.findByAppUserId(user.getUserId()));
+        Optional<AppUserVerificationEntity> verificationOptional = Optional.ofNullable(
+                appUserVerificationRepository.findByAppUserId(user.getUserId()));
 
         if (verificationOptional.isEmpty()) throw new ApiException("OTP not found");
 
         AppUserVerificationEntity verification = verificationOptional.get();
-        if (!verification.getOtp().equals(otp)) throw new ApiException("Invalid OTP");
 
-        if (verification.getExpirationTime().isBefore(now())) throw new ApiException("OTP expired, please resend OTP");
+        if (!passwordEncoder.matches(providedOtp, verification.getOtp()))
+            throw new ApiException("Invalid OTP");
+
+        if (verification.getExpirationTime().isBefore(now()))
+            throw new ApiException("OTP expired, please resend OTP");
 
         user.setVerified(true);
         appUserRepository.updateAppUser(user);
-
         appUserVerificationRepository.deleteByAppUserId(user.getUserId());
     }
 
@@ -114,8 +118,8 @@ public class EmailServiceImpl implements EmailService {
         if (userOptional.isEmpty()) throw new ApiException("User not found");
 
         AppUserEntity user = userOptional.get();
-
-        Optional<AppUserVerificationEntity> verificationOptional = Optional.ofNullable(appUserVerificationRepository.findByAppUserId(user.getUserId()));
+        Optional<AppUserVerificationEntity> verificationOptional = Optional.ofNullable(
+                appUserVerificationRepository.findByAppUserId(user.getUserId()));
 
         AppUserVerificationEntity verification;
         if (verificationOptional.isPresent()) {
@@ -126,17 +130,18 @@ public class EmailServiceImpl implements EmailService {
             verification = verificationOptional.get();
         } else {
             verification = new AppUserVerificationEntity();
-            verification.setVerificationId(UUID.randomUUID());
             verification.setUserId(user.getUserId());
             verification.setCreatedAt(now());
         }
 
-        verification.setOtp(otp);
+        String encodedOtp = passwordEncoder.encode(otp);
+        verification.setOtp(encodedOtp);
         verification.setExpirationTime(now().plusSeconds(120));
 
         appUserVerificationRepository.save(verification);
-        var isOtp = appUserVerificationRepository.findByOtp(otp);
-        if (isOtp == null) {
+
+        var savedVerification = appUserVerificationRepository.findByAppUserId(user.getUserId());
+        if (savedVerification == null) {
             throw new ApiException("Failed to save OTP");
         }
     }

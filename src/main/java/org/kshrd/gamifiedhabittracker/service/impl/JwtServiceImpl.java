@@ -36,6 +36,7 @@ public class JwtServiceImpl extends JwtConfiguration implements JwtService {
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         UserPrincipal appUser = (UserPrincipal) userDetails;
+//        claims.put("user_id", appUser.getUserId());
         claims.put("user", appUser.getUsername());
         return createToken(claims, appUser.getEmail());
     }

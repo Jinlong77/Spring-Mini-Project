@@ -14,7 +14,7 @@ public interface AppUserRepository {
         WHERE username = #{username}
     """)
     @Results(id = "appUserMapper", value = {
-            @Result(property = "userId", column = "app_user_id", javaType = UUID.class),
+            @Result(property = "userId", column = "app_user_id"),
             @Result(property = "profileImage", column = "profile_image"),
             @Result(property = "isVerified", column = "is_verified"),
             @Result(property = "createdAt", column = "created_at")
@@ -29,8 +29,8 @@ public interface AppUserRepository {
     AppUserEntity findAppUserByEmail(String email);
 
     @Select("""
-        INSERT INTO app_users
-        VALUES(#{userId}, #{username}, #{email}, #{password}, #{level}, #{xp}, #{profileImage}, #{isVerified}, #{createdAt})
+        INSERT INTO app_users(username, email, password, level, xp, profile_image, is_verified, created_at)
+        VALUES(#{username}, #{email}, #{password}, #{level}, #{xp}, #{profileImage}, #{isVerified}, #{createdAt})
         RETURNING *
     """)
     @ResultMap("appUserMapper")

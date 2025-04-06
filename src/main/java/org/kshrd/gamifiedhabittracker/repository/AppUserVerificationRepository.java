@@ -8,13 +8,12 @@ import java.util.UUID;
 @Mapper
 public interface AppUserVerificationRepository {
 
-
     @Select("""
         SELECT * FROM user_verification
         WHERE app_user_id = #{userId}
     """)
     @Results(id = "verificationMapper", value = {
-            @Result(property = "verificationId", column = "verification_id", javaType = UUID.class),
+            @Result(property = "verificationId", column = "verification_id"),
             @Result(property = "userId", column = "app_user_id", javaType = UUID.class),
             @Result(property = "expirationTime", column = "expiration_time"),
             @Result(property = "createdAt", column = "created_at")
