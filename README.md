@@ -2,15 +2,11 @@
 
 ![Custom Badge](https://img.shields.io/badge/Status-Active-brightgreen)
 ![Static Badge](https://img.shields.io/badge/Controller-habitlog-blue)
+.
+
+UserController បានបង្កើតដើម្បីគ្រប់គ្រងការងារ habitlog
 
 ```markdown
-
-
-<div style="color:white; background-color:green; margin-top:10px; padding:3px 8px; border-radius:4px; font-family:monospace">
-    UserController បានបង្កើតដើម្បីគ្រប់គ្រងការងារ habitlog
-</div>
-
-```java
 public class UserController {
     private final AppUserService appUserService;
 
@@ -38,7 +34,7 @@ public class UserController {
     service/implementation/HabitLogServiceImp.java
 </div>
 
-```
+```markdown
 ក្នុងការ post habitlog មាន៣ចូលរួម:
 1. @Override
    @Transactional
@@ -64,7 +60,7 @@ package org.kshrd.gamifiedhabittracker.controller;
     ក្នុង HabitController
 </div>
 
-```java
+```markdown
 @GetMapping("/{habit-id}")
 public ResponseEntity<?> getAllHabitById(@PathVariable("habit-id") UUID habitId) {
     UUID userUUID = UUID.fromString("f1a2b3c4-5d6e-7f89-a0b1-2345c678d901");
