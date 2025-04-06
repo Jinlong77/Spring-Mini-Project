@@ -68,4 +68,8 @@ public interface HabitRepository {
             @Result(property = "createdAt", column = "created_at")
     })
     AppUserEntity findUserById(UUID userUUID);
+
+    @ResultMap("habitMapper")
+    @Select("SELECT * FROM habits WHERE habit_id = #{habitId}")
+    HabitEntity getHabitById(UUID habitId);
 }
