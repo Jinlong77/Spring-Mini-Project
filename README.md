@@ -6,10 +6,10 @@
 
 UserController បានបង្កើតដើម្បីគ្រប់គ្រងការងារ habitlog
 
-```markdown
+```java
+
 public class UserController {
     private final AppUserService appUserService;
-
     @GetMapping
     @Operation(summary = "Get User Profile by id but static")
     public ResponseEntity<Response<?>> getUserProfile() {
@@ -34,7 +34,7 @@ public class UserController {
     service/implementation/HabitLogServiceImp.java
 </div>
 
-```markdown
+```java
 ក្នុងការ post habitlog មាន៣ចូលរួម:
 1. @Override
    @Transactional
@@ -60,7 +60,7 @@ package org.kshrd.gamifiedhabittracker.controller;
     ក្នុង HabitController
 </div>
 
-```markdown
+```java
 @GetMapping("/{habit-id}")
 public ResponseEntity<?> getAllHabitById(@PathVariable("habit-id") UUID habitId) {
     UUID userUUID = UUID.fromString("f1a2b3c4-5d6e-7f89-a0b1-2345c678d901");
