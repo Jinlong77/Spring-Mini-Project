@@ -8,6 +8,24 @@ spring:
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
 
+  mail:
+    host: ${EMAIL_HOST}
+    port: ${EMAIL_PORT}
+    username: ${EMAIL_ID}
+    password: ${EMAIL_PASSWORD}
+    default-encoding: UTF-8
+    properties:
+      mail:
+        mime:
+          charset: UTF
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+    verify:
+      host: ${VERIFY_EMAIL_HOST}
+
   servlet:
     multipart:
       enabled: true
@@ -22,6 +40,11 @@ minio:
     secret: 2KrS1OzBpF5TvoNtjknlVdgP6APGqsQJb5TJiucq
   bucket:
     name: btb-group1-mini-project-bucket
+
+
+
+server:
+  port: 9090
 
 jwt:
   secret: ${JWT_SECRET}

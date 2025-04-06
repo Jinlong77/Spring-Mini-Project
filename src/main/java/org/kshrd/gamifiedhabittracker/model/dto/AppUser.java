@@ -1,22 +1,22 @@
-package org.kshrd.gamifiedhabittracker.model;
+package org.kshrd.gamifiedhabittracker.model.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AppUserEntity {
+public class AppUser {
 
     private UUID userId;
     private String username;
     private String email;
-    private String password;
     private Integer level;
     private Integer xp;
     private String profileImage;

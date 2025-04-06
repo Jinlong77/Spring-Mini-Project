@@ -11,15 +11,16 @@ import java.util.UUID;
 
 @Mapper
 public interface HabitRepository {
+
     @Select("""
         SELECT * FROM habits
         WHERE habit_id = #{habitId} AND app_user_id = #{userUUID};
     """)
     @Results(id = "habitMapper", value = {
-            @Result(property = "habitId", column = "habit_id", typeHandler = UUIDTypeHandler.class),
+            @Result(property = "habitId", column = "habit_id", javaType = UUID.class),
             @Result(property = "isActive", column = "is_active"),
             @Result(property = "createdAt", column = "created_at"),
-            @Result(property = "user", column = "app_user_id", typeHandler = UUIDTypeHandler.class,
+            @Result(property = "user", column = "app_user_id", javaType = UUID.class,
                     one = @One(select = "findUserById")
             )
     })

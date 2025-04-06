@@ -25,20 +25,13 @@ public class GlobalExceptionHandler {
             ResourceNotFoundException.class,
             ApiException.class
     })
-    public ProblemDetail handleResponseException(HttpServletRequest request, ResourceNotFoundException e){
-        var detail = ProblemDetail.forStatusAndDetail(NOT_FOUND, e.getMessage());
+    public ProblemDetail handleResponseException(HttpServletRequest request, Exception e) {
+        var status = e instanceof ResourceNotFoundException ? NOT_FOUND : BAD_REQUEST;
+        var detail = ProblemDetail.forStatusAndDetail(status, e.getMessage());
         detail.setProperty("timestamp", LocalDateTime.now());
         detail.setType(URI.create(API_URL + request.getRequestURI()));
         return detail;
     }
-
-//    @ExceptionHandler()
-//    public ProblemDetail handleApiException(HttpServletRequest request, ApiException e){
-//        var detail = ProblemDetail.forStatusAndDetail(NOT_FOUND, e.getMessage());
-//        detail.setProperty("timestamp", LocalDateTime.now());
-//        detail.setType(URI.create(API_URL + request.getRequestURI()));
-//        return detail;
-//    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handleValidationExceptions(HttpServletRequest request, MethodArgumentNotValidException ex) {

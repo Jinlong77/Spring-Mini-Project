@@ -1,4 +1,4 @@
-package org.kshrd.gamifiedhabittracker.service.implementation;
+package org.kshrd.gamifiedhabittracker.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.kshrd.gamifiedhabittracker.enumeration.HabitStatus;
@@ -7,10 +7,12 @@ import org.kshrd.gamifiedhabittracker.exception.ResourceNotFoundException;
 import org.kshrd.gamifiedhabittracker.model.AppUserEntity;
 import org.kshrd.gamifiedhabittracker.model.HabitEntity;
 import org.kshrd.gamifiedhabittracker.model.HabitLogEntity;
-import org.kshrd.gamifiedhabittracker.model.dto.*;
+import org.kshrd.gamifiedhabittracker.model.domain.UserPrincipal;
 import org.kshrd.gamifiedhabittracker.model.dto.request.HabitLogRequest;
 import org.kshrd.gamifiedhabittracker.repository.*;
 import org.kshrd.gamifiedhabittracker.service.HabitLogService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,20 +27,18 @@ public class HabitLogServiceImp implements HabitLogService {
     private final HabitRepository habitRepository;
     private final AppUserRepository appUserRepository;
 
-    private final UUID userUUID = UUID.fromString("a89f03d4-4e27-4bc4-8b78-d61cb999a911");
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public HabitLogEntity createNewHabitLogService(HabitLogRequest habitLogRequest) {
 
-        // 1. Get the habit to verify it exists
-
-        HabitEntity habit = habitRepository.findHabitById(habitLogRequest.getHabitId(), userUUID);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        AppUserEntity user = appUserRepository.findAppUserByEmail(userPrincipal.getUsername());
+        HabitEntity habit = habitRepository.findHabitById(habitLogRequest.getHabitId(), user.getUserId());
         if (habit == null) {
             throw new ResourceNotFoundException("The habit id "+ habitLogRequest.getHabitId() + " has not been found.");
         }
 
-        // 2. Calculate XP earned (fixed 10 XP per log)
         HabitStatus status = habitLogRequest.getStatus();
         System.out.println("Request status: " + status);
         int xpEarned = 0;
@@ -51,8 +51,6 @@ public class HabitLogServiceImp implements HabitLogService {
         }
         System.out.println("Calculated xpEarned: " + xpEarned);
 
-        // 3. Create and save the log
-//        HabitLogEntity habitLog =  habitLogRepository.createNewHabitLogRepo(habitLogRequest, LocalDate.now(), xpEarned);
 
         System.out.println("xpEarned before insertion: " + xpEarned);
         HabitLogEntity habitLog = habitLogRepository.createNewHabitLogRepo(habitLogRequest, LocalDate.now(), xpEarned);
@@ -61,14 +59,11 @@ public class HabitLogServiceImp implements HabitLogService {
         if (habitLog == null)
             throw new ApiException("Failed to create habit log");
 
-        // 4. Update user's total XP
         UUID userId = habit.getUser().getUserId();
         updateUserXp(userId, xpEarned);
 
-        // 5. Refresh the nested AppUserEntity with the updated XP
         AppUserEntity updatedUser = appUserRepository.getAppUserRepo(userId);
         habit.setUser(updatedUser);
-        // Ensure the HabitLogEntity reflects the updated HabitEntity
         habitLog.setHabits(habit);
 
         return habitLog;
@@ -89,7 +84,6 @@ public class HabitLogServiceImp implements HabitLogService {
     private void checkForLevelUp(AppUserEntity user, int newXp) {
         int newLevel = newXp / 100;
         if (newLevel > user.getLevel()) {
-//            appUserRepository.updateLevel(UUID.fromString(user.getUserId()), newLevel);
             appUserRepository.updateLevel(user.getUserId(), newLevel);
         }
     }
