@@ -1,13 +1,12 @@
 package org.kshrd.gamifiedhabittracker.repository;
 
 import org.apache.ibatis.annotations.*;
-import org.kshrd.gamifiedhabittracker.model.dto.HabitEntity;
 import org.kshrd.gamifiedhabittracker.model.dto.HabitLogEntity;
 import org.kshrd.gamifiedhabittracker.model.dto.request.HabitLogRequest;
-import org.kshrd.gamifiedhabittracker.model.dto.response.AppUserResponse;
+
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.UUID;
 

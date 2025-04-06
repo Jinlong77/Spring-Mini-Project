@@ -1,13 +1,12 @@
 package org.kshrd.gamifiedhabittracker.service.implementation;
 
 import lombok.RequiredArgsConstructor;
-import org.kshrd.gamifiedhabittracker.model.dto.HabitEntity;
-import org.kshrd.gamifiedhabittracker.model.dto.HabitLogEntity;
+import org.kshrd.gamifiedhabittracker.model.dto.*;
 import org.kshrd.gamifiedhabittracker.model.dto.request.HabitLogRequest;
-import org.kshrd.gamifiedhabittracker.repository.HabitLogRepository;
-import org.kshrd.gamifiedhabittracker.repository.HabitRepository;
+import org.kshrd.gamifiedhabittracker.repository.*;
 import org.kshrd.gamifiedhabittracker.service.HabitLogService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,28 +18,55 @@ public class HabitLogServiceImp implements HabitLogService {
 
     private final HabitLogRepository habitLogRepository;
     private final HabitRepository habitRepository;
+    private final AppUserRepository appUserRepository;
+
     @Override
+    @Transactional
     public HabitLogEntity createNewHabitLogService(HabitLogRequest habitLogRequest) {
-        // Get how many times this habit has already been logged
+        // 1. Get the habit to verify it exists
+        HabitEntity habit = habitRepository.getHabitById(habitLogRequest.getHabitId());
+        if (habit == null) {
+            throw new RuntimeException("Habit not found");
+        }
+
+        // 2. Count existing logs for this habit
         int count = habitLogRepository.countLogsByHabitId(habitLogRequest.getHabitId());
 
-        // XP logic: (current count + 1) * 10
+        // 3. Calculate XP earned (fixed 10 XP per log)
         int xpEarned = 10;
 
-        // Create the entity
+        // 4. Create and save the log
         HabitLogEntity log = HabitLogEntity.builder()
                 .logDate(LocalDate.now())
                 .status(habitLogRequest.getStatus())
                 .xpEarned(xpEarned)
+                .habits(HabitEntity.builder()
+                        .habitId(habitLogRequest.getHabitId())
+                        .build())
                 .build();
 
-        // Call the repo to insert
         habitLogRepository.createNewHabitLogRepo(habitLogRequest, LocalDate.now(), xpEarned);
+
+        // 5. Update user's total XP - accessing through nested appUser object
+        updateUserXp(UUID.fromString(habit.getAppUser().getUserId()), xpEarned);
 
         return log;
     }
 
+    private void updateUserXp(UUID userId, int xpToAdd) {
+        AppUserEntity user = appUserRepository.getAppUserRepo(userId);
+        int currentXp = user.getXp();
+        int newXp = currentXp + xpToAdd;
+        appUserRepository.updateUserXp(userId, newXp);
+        checkForLevelUp(user, newXp);
+    }
 
+    private void checkForLevelUp(AppUserEntity user, int newXp) {
+        int newLevel = newXp / 100;
+        if (newLevel > user.getLevel()) {
+            appUserRepository.updateLevel(UUID.fromString(user.getUserId()), newLevel);
+        }
+    }
 
 
     @Override

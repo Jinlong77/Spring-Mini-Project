@@ -1,9 +1,6 @@
 package org.kshrd.gamifiedhabittracker.repository;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.kshrd.gamifiedhabittracker.model.dto.AppUserEntity;
 
 import java.util.List;
@@ -26,4 +23,20 @@ public interface AppUserRepository {
 
     @Select("select  * from app_users where app_user_id = #{userId}")
      AppUserEntity getAppUserRepo(UUID userId);
+
+  //---
+  @Select("""
+        SELECT COUNT(*) * 10 
+        FROM habit_logs hl 
+        JOIN habits h ON hl.habit_id = h.habit_id 
+        WHERE h.app_user_id = #{userId}
+        """)
+  int calculateXpFromHabits(UUID userId);
+
+    @Update("UPDATE app_users SET xp = #{newXp} WHERE app_user_id = #{userId}")
+    void updateUserXp(@Param("userId") UUID userId, @Param("newXp") int newXp);
+
+    //-
+    @Update("UPDATE app_users SET level = #{level} WHERE app_user_id = #{userId}")
+    void updateLevel(@Param("userId") UUID userId, @Param("level") int level);
 }

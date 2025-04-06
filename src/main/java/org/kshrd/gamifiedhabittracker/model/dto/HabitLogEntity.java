@@ -21,5 +21,6 @@ public class HabitLogEntity {
     private LocalDate logDate;
     private HabitStatus status;
     private Integer xpEarned;
+    private UUID habitId;  // Direct ID reference
     private HabitEntity habits;
 }
