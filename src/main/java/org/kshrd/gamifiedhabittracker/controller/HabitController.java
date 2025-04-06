@@ -38,7 +38,7 @@ public class HabitController {
     }
 
     @GetMapping("/{habit-id}")
-    public ResponseEntity<?> getAllHabitById(@PathVariable("habit-id") UUID habitId) {
+    public ResponseEntity<?> getAllHabitsById(@PathVariable("habit-id") UUID habitId) {
 //        UUID userUUID = UUID.fromString("f1a2b3c4-5d6e-7f89-a0b1-2345c678d901");
         HabitEntity habitEntity = habitService.getHabitsByHabitId(habitId);
 

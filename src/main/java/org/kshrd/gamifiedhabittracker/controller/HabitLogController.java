@@ -1,6 +1,7 @@
 package org.kshrd.gamifiedhabittracker.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.kshrd.gamifiedhabittracker.model.dto.HabitLogEntity;
 import org.kshrd.gamifiedhabittracker.model.dto.request.HabitLogRequest;
@@ -37,16 +38,15 @@ public class HabitLogController {
         }
     }
 
-
     @Operation(summary = "get all habit log by habit ID")
     @GetMapping("/{habit-id}")
-    public ResponseEntity<?> getHabitLogById(@PathVariable("habit-id") UUID habitId) {
+    public ResponseEntity<?> getHabitLogById(@PathVariable("habit-id") UUID habitId, @RequestParam(defaultValue = "1") @Positive Integer page, @RequestParam(defaultValue = "10") @Positive Integer size) {
 
-        List<HabitLogEntity> getteHabitLogById = habitLogService.getHabitLogByIdService(habitId);
+        List<HabitLogEntity> habitLogs = habitLogService.getHabitLogByIdService(habitId, page, size);
         Response<List<HabitLogEntity>>  response = new Response<>(
                 "Habit log retrieve successfully!",
                 "OK",
-                getteHabitLogById,
+                habitLogs,
                 LocalDateTime.now()
         );
         return new ResponseEntity<>(response, HttpStatus.OK);

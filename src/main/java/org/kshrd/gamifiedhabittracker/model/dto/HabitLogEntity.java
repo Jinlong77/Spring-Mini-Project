@@ -21,15 +21,6 @@ public class HabitLogEntity {
     private LocalDate logDate;
     private HabitStatus status;
     private Integer xpEarned;
-    private List<HabitEntity> habits;
-
-//    // Getter for habitId, delegating to the HabitEntity object
-//    public UUID getHabitId() {
-//        return habits != null ? habits.getHabitId() : null;
-//    }
-//
-//    // Ensure there is a setter for `setHabits`
-//    public void setHabits(HabitEntity habit) {
-//        this.habits = habit;
-//    }
+    private UUID habitId;  // Direct ID reference
+    private HabitEntity habits;
 }

@@ -15,7 +15,7 @@ public class AppUserServiceImp implements AppUserService {
 
 
     @Override
-    public AppUserEntity getAllAppuser(UUID userId) {
+    public AppUserEntity getAppuserByID(UUID userId) {
         return appUserRepository.getAppUserRepo(userId);
     }
 }
