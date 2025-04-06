@@ -1,129 +1,110 @@
+# Gamified Habit Tracker
 
+![Java](https://img.shields.io/badge/Java-21-blue) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.4-green) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue) ![MinIO](https://img.shields.io/badge/MinIO-latest-orange) ![License](https://img.shields.io/badge/License-MIT-yellow)
 
-![Custom Badge](https://img.shields.io/badge/Status-Active-brightgreen)
-![Static Badge](https://img.shields.io/badge/Controller-habitlog-blue)
-.
-demo: https://youtu.be/H4so23Pz8AA
+A gamified habit-tracking application built with Spring Boot. Track your habits, earn XP, unlock achievements, and level up while staying motivated! This project features user authentication, file uploads for profile images, and email verification, all integrated with PostgreSQL and MinIO storage.
 
-i am using this direct
-```
-spring:
-  application:
-    name:
-      gamified-habit-tracker
+---
 
-  datasource:
-    url: jdbc:postgresql://localhost:5432/spring_mini_project
-    username: 'nyfong'
-    password: '*******'
+## Table of Contents
+1. [Project Overview](#project-overview)
+2. [Features](#features)
+3. [Technologies Used](#technologies-used)
+4. [Prerequisites](#prerequisites)
+5. [Setup Instructions](#setup-instructions)
+6. [Running the Application](#running-the-application)
+7. [Database Schema](#database-schema)
+8. [API Endpoints](#api-endpoints)
+9. [Configuration](#configuration)
+10. [Contributing](#contributing)
+11. [License](#license)
 
+---
 
-jwt:
-  secret: ${JWT_SECRET}
-  expiration: ${JWT_EXPIRATION}
+## Project Overview
+The Gamified Habit Tracker is a RESTful Spring Boot application designed to make habit tracking fun and engaging. Users can create habits, log their progress, earn experience points (XP), and unlock achievements as they improve their routines. The app includes secure user authentication, file uploads for profile images, and email verification.
 
-```
-UserController បានបង្កើតដើម្បីជំនួយគ្រប់គ្រងការងារ habitlog
+---
 
-```java
+## Features
+- User registration, login, and email verification with OTP
+- Profile management (update/delete profiles, upload profile images)
+- Habit creation, tracking, and logging with pagination
+- Achievement system based on XP and habit milestones
+- File storage using MinIO for profile images
+- RESTful API with JWT-based authentication
 
-public class UserController {
-    private final AppUserService appUserService;
-    @GetMapping
-    @Operation(summary = "Get User Profile by id but static")
-    public ResponseEntity<Response<?>> getUserProfile() {
-        UUID userUUID = UUID.fromString("f1a2b3c4-5d6e-7f89-a0b1-2345c678d901");
-        AppUserEntity userEntity = appUserService.getAppuserByID(userUUID);
-        Response<AppUserEntity> response = new Response<>(
-                "Habit log created successfully!",
-                "OK",
-                userEntity,
-                LocalDateTime.now()
-        );
-        return new ResponseEntity<>(response, OK);
-    }
-}
-```
+---
 
-<div style="color:white; background-color:green; padding:3px 8px; border-radius:4px; font-family:monospace">
-    ប្រើសម្រាប់ update exp របស់ user
-</div>
+## Technologies Used
+- **Java**: 21
+- **Spring Boot**: 3.4.4
+- **Spring Data MyBatis**: For PostgreSQL integration
+- **Spring Security**: JWT-based authentication
+- **PostgreSQL**: Relational database
+- **MinIO**: Object storage for files
+- **Maven**: Dependency management
+- **Lombok**: To reduce boilerplate code
+- **Docker**: For MinIO containerization
 
-<div style="color:white; background-color:purple; margin:10px 0; padding:3px 8px; border-radius:4px; font-family:monospace">
-    service/implementation/HabitLogServiceImp.java
-</div>
+---
 
-```java
-ក្នុងការ post habitlog មាន៣ចូលរួម:
-1. @Override
-   @Transactional
-   public HabitLogEntity createNewHabitLogService(HabitLogRequest habitLogRequest)
-   
-2. private void updateUserXp(UUID userId, int xpToAdd)
-   
-3. private void checkForLevelUp(AppUserEntity user, int newXp)
-     
-ក្នុងការ get habitlog by id មានចូលរួម:
-1. private List<HabitLogEntity> getHabitLogByIdService(UUID habitId, Integer page, Integer size)
-```
+## Prerequisites
+- [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+- [Maven 3.8+](https://maven.apache.org/download.cgi)
+- [PostgreSQL 16](https://www.postgresql.org/download/)
+- [Docker](https://www.docker.com/get-started) (for MinIO)
+- [Git](https://git-scm.com/downloads) (optional)
 
-<div style="color:white; background-color:green; padding:3px 8px; border-radius:4px; font-family:monospace">
-    HabitController ក្នុង package
-</div>
+---
 
-```java
-package org.kshrd.gamifiedhabittracker.controller;
+## Setup Instructions
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/your-username/gamified-habit-tracker.git
+cd gamified-habit-tracker
 ```
 
-<div style="color:white; background-color:green; padding:3px 8px; border-radius:4px; font-family:monospace">
-    ក្នុង HabitController
-</div>
-
-```java
-@GetMapping("/{habit-id}")
-public ResponseEntity<?> getAllHabitById(@PathVariable("habit-id") UUID habitId) {
-    UUID userUUID = UUID.fromString("f1a2b3c4-5d6e-7f89-a0b1-2345c678d901");
-    HabitEntity habitEntity = habitService.getHabitsByHabitId(habitId);
-    Response<HabitEntity> response = new Response<>(
-            "Habit log created successfully!",
-            "OK",
-            habitEntity,
-            LocalDateTime.now()
-    );
-    return new ResponseEntity<>(response, HttpStatus.OK);
-}
+### 2. Configure Environment Variables
+Create a .env file in the root directory and populate it with the following:
+```bash
+POSTGRES_USER=your_postgres_user
+POSTGRES_PASSWORD=your_postgres_password
+POSTGRES_DB=spring_mini_project
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_ID=your_email@gmail.com
+EMAIL_PASSWORD=your_app_password
+VERIFY_EMAIL_HOST=http://localhost:9090
+JWT_SECRET=your_secret_key
+JWT_EXPIRATION=3600
 ```
 
-វាជួយនៅពេលដែលយើងធ្វើការប្រើ endpoint POST habit-log ព្រោះវាត្រូវមាន habitId ចាំបាច់ក្នុងការ map
-
-<div style="color:white; background-color:palevioletred; padding:3px 8px; border-radius:4px; font-family:monospace">
-    POST
-</div>
-
-```json
-{
-  "status": "COMPLETED",
-  "habitId": "d6913c64-7dc5-4bd1-ab1a-1037fb25e4f9"
-}
+### 3. Set Up PostgreSQL
+Install PostgreSQL and create a database:
+```bash
+CREATE DATABASE spring_mini_project;
 ```
 
-បើ <span style="color:green">GET</span> យើងប្រើ pagination
+### 4. Start MinIO with Docker
+Run the MinIO service using the provided compose.yml:
 
-<div style="border:1px solid #ccc; padding:10px; border-radius:5px; background-color:#f9f9f9">
-  <p style="font-weight:bold">Note</p>
-
-  <div style="color:white; background-color:red; padding:3px 8px; border-radius:4px; font-family:monospace; margin:5px 0">
-    ញុមអត់ទាន់ validate ទេ
-  </div>
-
-  <div style="color:white; background-color:orange; padding:3px 8px; border-radius:4px; font-family:monospace; margin:5px 0">
-    ញុមដូរ filed ខ្លះ តែមិនច្រើនទេ
-  </div>
-
-  <div style="color:white; background-color:green; padding:3px 8px; border-radius:4px; font-family:monospace; margin:5px 0">
-    សូមអរគុណ
-  </div>
-</div>
-
-![Custom Badge](http://34.87.39.167:9085/api/v1/files/preview-file/f407c063-9d51-4b4e-a44d-a9848416c23e.png)
+```bash
+docker-compose -f compose.yml up -d
 ```
+Access the MinIO console at http://localhost:9001 (user: admin, password: Password@123!).
+
+### 5. Install Dependencies
+```bash
+mvn clean install
+```
+
+### Running the Application
+Start the Spring Boot application:
+```bash
+mvn spring-boot:run
+```
+The app will run on http://localhost:9090.
+
+

@@ -20,8 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.kshrd.gamifiedhabittracker.constant.Constant.AUTH_API;
-import static org.kshrd.gamifiedhabittracker.constant.Constant.PROFILE_API;
+import static org.kshrd.gamifiedhabittracker.constant.Constant.*;
 
 @Configuration
 @EnableMethodSecurity
@@ -55,6 +54,8 @@ public class AuthFilterChain {
                                 AUTH_API + "/login",
                                 AUTH_API + "/verify",
                                 AUTH_API + "/resend",
+                                "/api/v1/files/preview-file",
+                                "/api/v1/files/upload-file",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
