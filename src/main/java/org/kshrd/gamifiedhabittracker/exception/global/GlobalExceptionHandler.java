@@ -21,10 +21,10 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(exception = {
-            ResourceNotFoundException.class,
-            ApiException.class
-    })
+//    @ExceptionHandler(exception = {
+//            ResourceNotFoundException.class,
+//            ApiException.class
+//    })
     public ProblemDetail handleResponseException(HttpServletRequest request, ResourceNotFoundException e){
         var detail = ProblemDetail.forStatusAndDetail(NOT_FOUND, e.getMessage());
         detail.setProperty("timestamp", LocalDateTime.now());

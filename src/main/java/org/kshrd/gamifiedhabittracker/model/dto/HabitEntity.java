@@ -1,9 +1,14 @@
 package org.kshrd.gamifiedhabittracker.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.kshrd.gamifiedhabittracker.enumeration.FrequencyType;
 
-@Data
+import java.util.UUID;
+
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -14,5 +19,7 @@ public class HabitEntity {
     private String description;
     private FrequencyType frequencyType;
     private boolean isActive;
-    private Integer userId;
+    private String userId;
+
+
 }
