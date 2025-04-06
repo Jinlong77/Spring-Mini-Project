@@ -2,7 +2,7 @@ package org.kshrd.gamifiedhabittracker.model.dto;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Data
 @NoArgsConstructor
@@ -18,5 +18,5 @@ public class AppUserEntity {
     private Integer xp;
     private String profileImage;
     private boolean isVerified;
-    private LocalDateTime createAt;
+    private Instant createAt;
 }

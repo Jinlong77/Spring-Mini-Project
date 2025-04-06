@@ -44,7 +44,7 @@ public class HabitLogController {
 
         List<HabitLogEntity> getteHabitLogById = habitLogService.getHabitLogByIdService(habitId);
         Response<List<HabitLogEntity>>  response = new Response<>(
-                "Habit log retrive successfully!",
+                "Habit log retrieve successfully!",
                 "OK",
                 getteHabitLogById,
                 LocalDateTime.now()
