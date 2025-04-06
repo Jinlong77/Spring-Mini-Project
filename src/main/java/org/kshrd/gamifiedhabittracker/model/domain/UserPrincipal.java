@@ -24,17 +24,13 @@ public class UserPrincipal implements UserDetails {
         return appUserEntity.getPassword();
     }
 
-    public String getEmail() {
-        return appUserEntity.getEmail();
-    }
-
     public UUID getUserId() {
         return appUserEntity.getUserId();
     }
 
     @Override
     public String getUsername() {
-        return appUserEntity.getUsername();
+        return appUserEntity.getEmail();
     }
 
     @Override

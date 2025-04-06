@@ -6,16 +6,17 @@ import org.kshrd.gamifiedhabittracker.event.UserEvent;
 import org.kshrd.gamifiedhabittracker.exception.ApiException;
 import org.kshrd.gamifiedhabittracker.exception.ResourceNotFoundException;
 import org.kshrd.gamifiedhabittracker.model.AppUserEntity;
-import org.kshrd.gamifiedhabittracker.model.AppUserVerificationEntity;
 import org.kshrd.gamifiedhabittracker.model.domain.UserPrincipal;
 import org.kshrd.gamifiedhabittracker.model.dto.AppUser;
+import org.kshrd.gamifiedhabittracker.model.dto.request.AppUserRequest;
 import org.kshrd.gamifiedhabittracker.model.dto.request.RegisterRequest;
 import org.kshrd.gamifiedhabittracker.repository.AppUserRepository;
-import org.kshrd.gamifiedhabittracker.repository.AppUserVerificationRepository;
 import org.kshrd.gamifiedhabittracker.service.AppUserService;
 import org.kshrd.gamifiedhabittracker.service.EmailService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -40,6 +41,27 @@ public class AppUserServiceImpl implements AppUserService {
     @Async
     public CompletableFuture<String> encodePassword(String password) {
         return CompletableFuture.completedFuture(encoder.encode(password));
+    }
+
+    @Override
+    public AppUser getCurrent() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        return getAppUserByEmail(userPrincipal.getUsername());
+    }
+
+    @Override
+    public AppUser updateAppUserProfile(AppUserRequest appUserRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        String email = userPrincipal.getUsername();
+
+        AppUserEntity userEntity = appUserRepository.updateAppUserProfile(email, appUserRequest);
+        if (userEntity == null) {
+            throw new ResourceNotFoundException("User not found or could not be updated");
+        }
+
+        return getAppUserFromAppUserEntity(userEntity);
     }
 
     @Override
@@ -72,6 +94,20 @@ public class AppUserServiceImpl implements AppUserService {
     @Override
     public void resendVerificationEmail(String email) {
         resendAppUserVerificationEmail(email);
+    }
+
+    @Override
+    public void deleteCurrentUserProfile() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        String email = userPrincipal.getUsername();
+
+        AppUserEntity userEntity = appUserRepository.findAppUserByEmail(email);
+        if (userEntity == null) {
+            throw new ResourceNotFoundException("User not found");
+        }
+
+        appUserRepository.delete(userEntity);
     }
 
     @Override

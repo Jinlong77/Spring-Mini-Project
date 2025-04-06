@@ -19,12 +19,14 @@ import java.util.function.Function;
 @Service
 public class JwtServiceImpl extends JwtConfiguration implements JwtService {
 
+    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+
     private String createToken(Map<String, Object> claim, String subject) {
         return Jwts.builder()
                 .claims(claim)
                 .subject(subject)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + getExpiration() * 1000))
+                .expiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
                 .signWith(getSignKey()).compact();
     }
 
@@ -36,9 +38,8 @@ public class JwtServiceImpl extends JwtConfiguration implements JwtService {
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         UserPrincipal appUser = (UserPrincipal) userDetails;
-//        claims.put("user_id", appUser.getUserId());
-        claims.put("user", appUser.getUsername());
-        return createToken(claims, appUser.getEmail());
+        claims.put("user_id", appUser.getUserId());
+        return createToken(claims, appUser.getUsername());
     }
 
     private Claims extractAllClaim(String token) {

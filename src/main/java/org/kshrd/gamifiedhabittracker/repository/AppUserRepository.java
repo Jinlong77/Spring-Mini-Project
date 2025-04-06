@@ -2,9 +2,7 @@ package org.kshrd.gamifiedhabittracker.repository;
 
 import org.apache.ibatis.annotations.*;
 import org.kshrd.gamifiedhabittracker.model.AppUserEntity;
-
-import java.util.UUID;
-
+import org.kshrd.gamifiedhabittracker.model.dto.request.AppUserRequest;
 
 @Mapper
 public interface AppUserRepository {
@@ -20,6 +18,15 @@ public interface AppUserRepository {
             @Result(property = "createdAt", column = "created_at")
     })
     AppUserEntity findAppUserByUsername(String username);
+
+    @Select("""
+        UPDATE app_users
+        SET username = #{appUser.username}, profile_image = #{appUser.profileImage}
+        WHERE email = #{email}
+        RETURNING *
+    """)
+    @ResultMap("appUserMapper")
+    AppUserEntity updateAppUserProfile(String email, @Param("appUser") AppUserRequest appUserRequest);
 
     @Select("""
         SELECT * FROM app_users
@@ -51,4 +58,11 @@ public interface AppUserRepository {
     """)
     @ResultMap("appUserMapper")
     AppUserEntity updateAppUser(AppUserEntity userEntity);
+
+    @Delete("""
+        DELETE FROM app_users
+        WHERE app_user_id = #{userId}
+    """)
+    @ResultMap("appUserMapper")
+    void delete(AppUserEntity userEntity);
 }
