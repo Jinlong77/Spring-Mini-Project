@@ -19,14 +19,12 @@ import java.util.function.Function;
 @Service
 public class JwtServiceImpl extends JwtConfiguration implements JwtService {
 
-    public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
-
     private String createToken(Map<String, Object> claim, String subject) {
         return Jwts.builder()
                 .claims(claim)
                 .subject(subject)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
+                .expiration(new Date(System.currentTimeMillis() + getExpiration() * 1000))
                 .signWith(getSignKey()).compact();
     }
 

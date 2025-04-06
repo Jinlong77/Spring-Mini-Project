@@ -1,6 +1,7 @@
 package org.kshrd.gamifiedhabittracker.service;
 
-import org.kshrd.gamifiedhabittracker.model.dto.AchievementEntity;
+
+import org.kshrd.gamifiedhabittracker.model.AchievementEntity;
 
 import java.util.List;
 

@@ -1,31 +1,45 @@
 package org.kshrd.gamifiedhabittracker.repository;
 
 import org.apache.ibatis.annotations.*;
-import org.kshrd.gamifiedhabittracker.model.dto.AchievementEntity;
+import org.kshrd.gamifiedhabittracker.model.AchievementEntity;
 
 import java.util.List;
+import java.util.UUID;
 
 @Mapper
 public interface AchievementRepository {
+
+
+    @Select("""
+        SELECT * FROM achievements a
+        INNER JOIN app_user_achievements ac ON a.achievement_id = ac.achievement_id
+        WHERE ac.app_user_id = #{id} AND a.xp_required <= #{xp}
+        OFFSET  #{size} * (#{page}-1)
+        LIMIT   #{size};
+    """)
+    @Results(id = "achievementMapper",value = {
+            @Result(property = "achievementId",column = "achievement_id", javaType = UUID.class),
+            @Result(property = "xpRequired",column = "xp_required"),
+    })
+    List<AchievementEntity> getAchievementByUser(UUID id, Integer xp, Integer page, Integer size);
+
+    @Insert("""
+        INSERT INTO app_user_achievements(app_user_id, achievement_id)
+        VALUES(#{appUserId}, #{achievementId})
+    """)
+    void insertAchievement(UUID appUserId, UUID achievementId);
+
+    @Select("""
+        SELECT * FROM achievements
+    """)
+    @ResultMap("achievementMapper")
+    List<AchievementEntity> getAllAchievements();
 
     @Select("""
         SELECT * FROM achievements
         offset  #{size} * (#{page}-1)
         limit   #{size};
     """)
-    @Results(id = "achievementMapper",value = {
-            @Result(property = "achievementId",column = "achievement_id"),
-            @Result(property = "xpRequired",column = "xp_required")
-    })
-    List<AchievementEntity> getAllAchievements(Integer page, Integer size);
-
-    @Select("""
-        SELECT * FROM app_users a_user
-        INNER JOIN app_user_achievements a_user_achieve ON a_user.app_user_id = a_user_achieve.app_user_id
-        WHERE a_user_achieve.achievement_id = #{id} 
-        OFFSET  #{size} * (#{page}-1)
-        LIMIT   #{size};
-    """)
     @ResultMap("achievementMapper")
-    List<AchievementEntity> getAchievementByUser(Integer page, Integer size);
+    List<AchievementEntity> getAllAchievementsByPagination(Integer page, Integer size);
 }

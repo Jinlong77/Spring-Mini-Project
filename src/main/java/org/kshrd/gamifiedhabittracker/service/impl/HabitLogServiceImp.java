@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.kshrd.gamifiedhabittracker.enumeration.HabitStatus;
 import org.kshrd.gamifiedhabittracker.exception.ApiException;
 import org.kshrd.gamifiedhabittracker.exception.ResourceNotFoundException;
+import org.kshrd.gamifiedhabittracker.model.AchievementEntity;
 import org.kshrd.gamifiedhabittracker.model.AppUserEntity;
 import org.kshrd.gamifiedhabittracker.model.HabitEntity;
 import org.kshrd.gamifiedhabittracker.model.HabitLogEntity;
@@ -26,6 +27,7 @@ public class HabitLogServiceImp implements HabitLogService {
     private final HabitLogRepository habitLogRepository;
     private final HabitRepository habitRepository;
     private final AppUserRepository appUserRepository;
+    private final AchievementRepository achievementRepository;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -63,6 +65,12 @@ public class HabitLogServiceImp implements HabitLogService {
         updateUserXp(userId, xpEarned);
 
         AppUserEntity updatedUser = appUserRepository.getAppUserRepo(userId);
+        List<AchievementEntity> achievement = achievementRepository.getAllAchievements();
+        achievement.forEach(achievementEntity -> {
+            if (updatedUser.getXp() >= achievementEntity.getXpRequired()) {
+                achievementRepository.insertAchievement(userId, achievementEntity.getAchievementId());
+            }
+        });
         habit.setUser(updatedUser);
         habitLog.setHabits(habit);
 
