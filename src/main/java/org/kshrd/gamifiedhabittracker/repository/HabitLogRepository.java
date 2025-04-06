@@ -35,8 +35,8 @@ public interface HabitLogRepository {
 
     //get by id
     @ResultMap("habitLogMapper")
-    @Select(" select  * from habit_logs where habit_id = #{habitId}")
-    List<HabitLogEntity> getHabitLogByIdRepo(UUID habitId);
+    @Select(" select  * from habit_logs where habit_id = #{habitId}  offset #{size} *(#{page}-1)  limit #{size}; ")
+    List<HabitLogEntity> getHabitLogByIdRepo(UUID habitId, Integer page, Integer size );
     //--
     @Select("SELECT COUNT(*) FROM habit_logs WHERE habit_id = CAST(#{habitId} AS UUID)")
     int getCompletionCount(String habitId);

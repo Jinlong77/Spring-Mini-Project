@@ -12,5 +12,5 @@ public interface HabitLogService  {
     HabitLogEntity createNewHabitLogService(HabitLogRequest habitLogRequest) ;
 
      //get habit log id
-     List<HabitLogEntity> getHabitLogByIdService(UUID habitId );
+     List<HabitLogEntity> getHabitLogByIdService(UUID habitId,Integer page, Integer size );
 }

@@ -28,10 +28,8 @@ public class HabitLogServiceImp implements HabitLogService {
         if (habit == null) {
             throw new RuntimeException("Habit not found");
         }
-
         // 2. Count existing logs for this habit
         int count = habitLogRepository.countLogsByHabitId(habitLogRequest.getHabitId());
-
         // 3. Calculate XP earned (fixed 10 XP per log)
         int xpEarned = 10;
 
@@ -70,8 +68,8 @@ public class HabitLogServiceImp implements HabitLogService {
 
 
     @Override
-    public List<HabitLogEntity> getHabitLogByIdService(UUID habitId) {
-        return habitLogRepository.getHabitLogByIdRepo(habitId);
+    public List<HabitLogEntity> getHabitLogByIdService(UUID habitId, Integer page, Integer size ) {
+        return habitLogRepository.getHabitLogByIdRepo(habitId,  page,  size );
     }
 
 }
