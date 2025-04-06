@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Account Verification</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .otp-box {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Account Verification</h1>
+    <p>Hello,</p>
+    <p>Thank you for registering. Please use the following OTP code to verify your account:</p>
+    <div class="otp-box" th:text="${otp}">123456</div>
+    <p>This code will expire in 2 minutes.</p>
+    <p>Best regards,<br>Gamified Habit Tracker Team</p>
+</div>
+</body>
+</html>

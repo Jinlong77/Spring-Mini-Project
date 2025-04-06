@@ -51,6 +51,6 @@ public class ApiAuthenticationProvider implements AuthenticationProvider {
 
 
     private final Consumer<UserPrincipal> validAccount = userPrincipal -> {
-        if (!userPrincipal.isEnabled()) throw new DisabledException("Your account is disabled");
+        if (!userPrincipal.isEnabled()) throw new DisabledException("Your email is not verified");
     };
 }

@@ -16,8 +16,8 @@ public class UserListener {
     @EventListener
     public void onUserEvent(UserEvent userEvent) {
         switch (userEvent.getEventType()) {
-            case REGISTRATION -> this.emailService.sendNewAccountEmail();
-            case RESEND_CONFIRMATION -> this.emailService.sendResetPasswordEmail();
+            case REGISTRATION -> this.emailService.sendNewAccountEmail(userEvent.getUser().getEmail());
+            case RESEND_CONFIRMATION -> this.emailService.sendResendOTPEmail(userEvent.getUser().getEmail());
         }
     }
 }

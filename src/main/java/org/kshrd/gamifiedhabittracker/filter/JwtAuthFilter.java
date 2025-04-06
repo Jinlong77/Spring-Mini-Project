@@ -5,7 +5,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.kshrd.gamifiedhabittracker.exception.ApiException;
 import org.kshrd.gamifiedhabittracker.service.AppUserService;
+import org.kshrd.gamifiedhabittracker.service.JwtService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +17,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-import static org.kshrd.gamifiedhabittracker.utils.JwtUtils.extractEmail;
 
 
 @Component
@@ -24,6 +25,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 
     private final AppUserService appUserService;
+    private final JwtService jwtService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -34,9 +36,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             String token = authHeader.substring(7);
 
+            if (jwtService.validateToken(token, appUserService.loadUserByUsername(jwtService.extractEmail(token)))) throw new ApiException("Token is invalid");
+
             try {
 
-                String email = extractEmail(token);
+                String email = jwtService.extractEmail(token);
 
                 if(email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 

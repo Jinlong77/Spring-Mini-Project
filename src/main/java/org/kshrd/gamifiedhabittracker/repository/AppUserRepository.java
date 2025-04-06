@@ -35,4 +35,20 @@ public interface AppUserRepository {
     """)
     @ResultMap("appUserMapper")
     AppUserEntity createAppUser(AppUserEntity appUserEntity);
+
+    @Select("""
+        UPDATE app_users
+        SET
+            username = #{username},
+            email = #{email},
+            password = #{password},
+            level = #{level},
+            xp = #{xp},
+            profile_image = #{profileImage},
+            is_verified = #{isVerified}
+        WHERE app_user_id = #{userId}
+        RETURNING *
+    """)
+    @ResultMap("appUserMapper")
+    AppUserEntity updateAppUser(AppUserEntity userEntity);
 }

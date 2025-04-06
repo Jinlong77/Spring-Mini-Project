@@ -47,7 +47,8 @@ public class AuthFilterChain {
                         .requestMatchers(
                                 AUTH_API + "/register",
                                 AUTH_API + "/login",
-                                PROFILE_API + "/**",
+                                AUTH_API + "/verify",
+                                AUTH_API + "/resend",
                                 "/api/v1/users/test",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",

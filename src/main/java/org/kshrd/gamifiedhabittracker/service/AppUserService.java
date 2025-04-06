@@ -8,4 +8,6 @@ public interface AppUserService extends UserDetailsService {
 
     AppUser getAppUserByEmail(String email);
     AppUser register(RegisterRequest registerRequest);
+    void verifyEmail(String email, String otp);
+    void resendVerificationEmail(String email);
 }

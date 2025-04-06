@@ -15,5 +15,4 @@ public class UserEvent {
 
     private AppUserEntity user;
     private EventType eventType;
-    private Map<?, ?> data;
 }
