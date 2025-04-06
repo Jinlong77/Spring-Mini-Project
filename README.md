@@ -4,7 +4,26 @@
 ![Static Badge](https://img.shields.io/badge/Controller-habitlog-blue)
 .
 
-UserController បានបង្កើតដើម្បីគ្រប់គ្រងការងារ habitlog
+
+i am using this direct
+```
+spring:
+  application:
+    name:
+      gamified-habit-tracker
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/spring_mini_project
+    username: 'nyfong'
+    password: '*******'
+
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
+
+```
+UserController បានបង្កើតដើម្បីជំនួយគ្រប់គ្រងការងារ habitlog
 
 ```java
 
